@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class SpeedItem : MonoBehaviour
+public class ScoreTest : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public TextMeshProUGUI stage1;
+    public TextMeshProUGUI stage2;
+
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        stage1.text = "STAGE 1 : " + HighScore.Load(1).ToString();
+        stage2.text = "STAGE 2 : " + HighScore.Load(2).ToString();
     }
 }

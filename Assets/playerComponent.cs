@@ -12,7 +12,7 @@ public class playerComponent : MonoBehaviour
     public float glowEffectDuration = 3f;
 
     public GameObject currentCrownEffect;
-    public GameObject 무적임펙트; // 무적 이펙트 오브젝트 (Hierarchy에 존재)
+    public GameObject 무적임펙트;
     public bool isInvincible = false;
 
     private float originalJumpForce;
@@ -27,11 +27,16 @@ public class playerComponent : MonoBehaviour
     private int jumpCount;
     public int maxJumpCount = 1;
 
+    // ✅ 점수 관련
+    private float score;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         originalJumpForce = jumpForce;
+
+        score = 1000f; // ✅ 시작 점수
 
         if (glowEffect != null)
             glowEffect.SetActive(false);
@@ -70,6 +75,9 @@ public class playerComponent : MonoBehaviour
         {
             transform.localScale = new Vector3(Mathf.Sign(moveInput), 1, 1);
         }
+
+        // ✅ 점수 감소
+        score -= Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -81,6 +89,9 @@ public class playerComponent : MonoBehaviour
 
         if (collision.CompareTag("Finish"))
         {
+            int stage = SceneManager.GetActiveScene().buildIndex;
+            HighScore.TrySet(stage, (int)score); // ✅ 점수 저장
+
             LevelObject levelObj = collision.GetComponent<LevelObject>();
             if (levelObj != null)
                 levelObj.moveTonextLevel();
@@ -118,7 +129,7 @@ public class playerComponent : MonoBehaviour
 
         if (collision.CompareTag("InvincibilityItem"))
         {
-            StartCoroutine(BecomeInvincible(4f)); // 4초 동안 무적
+            StartCoroutine(BecomeInvincible(4f));
             Destroy(collision.gameObject);
         }
     }
@@ -189,7 +200,6 @@ public class playerComponent : MonoBehaviour
         }
     }
 
-    // ✅ 무적 상태 + 무적 임펙트 활성화
     public IEnumerator BecomeInvincible(float duration)
     {
         isInvincible = true;
