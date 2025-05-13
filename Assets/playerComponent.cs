@@ -89,8 +89,11 @@ public class playerComponent : MonoBehaviour
 
         if (collision.CompareTag("Finish"))
         {
+
+            StageResultSaver.SaveStage(SceneManager.GetActiveScene().buildIndex, (int)score);
+
             int stage = SceneManager.GetActiveScene().buildIndex;
-            HighScore.TrySet(stage, (int)score); // ✅ 점수 저장
+           
 
             LevelObject levelObj = collision.GetComponent<LevelObject>();
             if (levelObj != null)
