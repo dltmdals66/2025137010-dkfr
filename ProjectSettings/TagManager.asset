@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - SpeedItem
   - InvincibilityItem
+  - Item
   layers:
   - Default
   - TransparentFX
